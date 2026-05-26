@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capacitação Foundry — Squad Optimus</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'DM Sans',sans-serif;background:#F0F4F8;color:#1B3A6B;min-height:100vh;padding:1.5rem}
+  .wrap{max-width:960px;margin:0 auto}
+
+  /* HEADER */
+  .header{background:#1B3A6B;border-radius:14px;padding:1.25rem 1.5rem;margin-bottom:1rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+  .header-left h1{font-family:'DM Serif Display',serif;font-size:22px;color:#fff;margin-bottom:3px}
+  .header-left p{font-size:12px;color:#A8C8EC}
+  .header-right{display:flex;gap:8px;flex-wrap:wrap}
+  .badge{font-size:11px;font-weight:500;padding:4px 12px;border-radius:20px}
+  .badge-live{background:#E8F4EE;color:#1A6640}
+  .badge-restricted{background:#FCF0F0;color:#8B1A1A}
+  .gold-bar{height:4px;background:linear-gradient(90deg,#F0A500,#F5C842,#1B3A6B);border-radius:0 0 6px 6px;margin-bottom:1rem}
+
+  /* KPIs */
+  .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1rem}
+  .kpi{background:#fff;border-radius:12px;padding:1rem;text-align:center;border:1px solid #DDE9F9}
+  .kpi-num{font-family:'DM Serif Display',serif;font-size:32px;line-height:1;margin-bottom:4px}
+  .kpi-lbl{font-size:11px;color:#6B7D8E;text-transform:uppercase;letter-spacing:.05em}
+
+  /* SECTION LABEL */
+  .sec{font-size:10.5px;font-weight:600;color:#6B7D8E;letter-spacing:.1em;text-transform:uppercase;margin:0 0 10px;display:flex;align-items:center;gap:8px}
+  .sec::after{content:'';flex:1;height:1px;background:#DDE9F9}
+
+  /* DEV CARDS */
+  .dev-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem}
+  .dev-card{background:#fff;border:1px solid #DDE9F9;border-radius:12px;padding:1rem 1.25rem;transition:box-shadow .2s}
+  .dev-card:hover{box-shadow:0 4px 16px rgba(27,58,107,.08)}
+  .dev-card.star{border-color:#C0DD97}
+  .dev-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+  .avatar{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0}
+  .dev-name{font-size:13px;font-weight:600;color:#1B3A6B}
+  .dev-sub{font-size:11px;color:#6B7D8E;margin-top:1px}
+  .status-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;padding:3px 9px;border-radius:20px;margin-left:auto;flex-shrink:0}
+  .s-star{background:#FEF3D8;color:#7A5000}
+  .s-ahead{background:#E8F4EE;color:#1A6640}
+  .s-track{background:#E6F1FB;color:#0C447C}
+  .s-warn{background:#FCF0F0;color:#8B1A1A}
+
+  .prog-row{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+  .prog-lbl{font-size:11px;color:#6B7D8E;width:58px;flex-shrink:0}
+  .prog-bar{flex:1;height:7px;background:#EDF2F8;border-radius:4px;overflow:hidden}
+  .prog-fill{height:100%;border-radius:4px;transition:width .6s ease}
+  .prog-pct{font-size:11px;font-weight:600;width:30px;text-align:right;flex-shrink:0}
+
+  .milestone{display:flex;align-items:center;gap:6px;font-size:11px;color:#6B7D8E;margin-top:10px;padding-top:10px;border-top:1px solid #EDF2F8}
+  .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+
+  /* RANKING */
+  .ranking{background:#fff;border:1px solid #DDE9F9;border-radius:12px;padding:1rem 1.25rem;margin-bottom:1rem}
+  .rank-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid #EDF2F8}
+  .rank-row:last-child{border-bottom:none}
+  .rank-name{font-size:12px;font-weight:600;color:#1B3A6B;width:120px;flex-shrink:0}
+  .rank-bar-wrap{flex:1;height:22px;background:#EDF2F8;border-radius:6px;overflow:hidden}
+  .rank-bar{height:100%;border-radius:6px;display:flex;align-items:center;padding-left:8px;font-size:10px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;transition:width .8s ease}
+  .rank-pct{font-size:12px;font-weight:600;width:36px;text-align:right;flex-shrink:0}
+  .rank-proj{font-size:11px;color:#6B7D8E;width:64px;text-align:right;flex-shrink:0}
+
+  /* MEETINGS */
+  .meetings{background:#fff;border:1px solid #DDE9F9;border-radius:12px;padding:1rem 1.25rem;margin-bottom:1rem}
+  .meet-row{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid #EDF2F8;font-size:12px}
+  .meet-row:last-child{border-bottom:none}
+  .meet-date{width:44px;flex-shrink:0;font-weight:600;color:#1B3A6B}
+  .meet-tag{width:80px;flex-shrink:0}
+  .meet-topic{flex:1;color:#4A5568;line-height:1.5}
+  .tag-pill{font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px}
+  .t-foundry{background:#E6F1FB;color:#0C447C}
+  .t-python{background:#EAF3DE;color:#1A6640}
+  .t-sql{background:#EEEDFE;color:#3C3489}
+  .t-github{background:#FEF3D8;color:#7A5000}
+
+  /* FOOTER */
+  .footer{text-align:center;font-size:11px;color:#9AB0C4;padding:1rem 0 .5rem;border-top:1px solid #DDE9F9;margin-top:.5rem}
+
+  /* LAST UPDATED */
+  .updated{background:#EAF3DE;border-radius:8px;padding:6px 12px;font-size:11px;color:#1A6640;display:inline-flex;align-items:center;gap:6px;margin-bottom:1rem}
+
+  @media(max-width:600px){
+    .dev-grid{grid-template-columns:1fr}
+    .kpi-grid{grid-template-columns:repeat(2,1fr)}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header">
+    <div class="header-left">
+      <h1>Capacitação Foundry — Squad Optimus</h1>
+      <p>26/Mai → 08/Jun/2026 · Trilha priorizada: ~31h · Cliente Lear · Acompanhamento semanal via Teams + Loop</p>
+    </div>
+    <div class="header-right">
+      <span class="badge badge-live">&#9679; Ao vivo</span>
+      <span class="badge badge-restricted">Restrito</span>
+    </div>
+  </div>
+  <div class="gold-bar"></div>
+
+  <div class="updated">&#10003; Última atualização: 26/Mai/2026 — Dia 1 de 10</div>
+
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-num" style="color:#1A6640">5</div><div class="kpi-lbl">Adiantados</div></div>
+    <div class="kpi"><div class="kpi-num" style="color:#185FA5">1</div><div class="kpi-lbl">No prazo</div></div>
+    <div class="kpi"><div class="kpi-num" style="color:#8B1A1A">0</div><div class="kpi-lbl">Atenção</div></div>
+    <div class="kpi"><div class="kpi-num" style="color:#7A5000">~31h</div><div class="kpi-lbl">Meta trilha</div></div>
+  </div>
+
+  <div class="sec">Cards individuais — status e progresso</div>
+  <div class="dev-grid">
+
+    <div class="dev-card star">
+      <div class="dev-head">
+        <div class="avatar" style="background:#EAF3DE;color:#1A6640">EK</div>
+        <div><div class="dev-name">Emilly Kennieli <span style="font-size:10px;color:#BA7517;font-weight:400">&#9733; Referência</span></div><div class="dev-sub">Iniciou 12/Mai · 1 projeto Foundry ativo</div></div>
+        <span class="status-badge s-star">Adiantada</span>
+      </div>
+      <div class="prog-row"><span class="prog-lbl">Foundry</span><div class="prog-bar"><div class="prog-fill" style="width:86%;background:#3B6D11"></div></div><span class="prog-pct" style="color:#3B6D11">86%</span></div>
+      <div class="prog-row"><span class="prog-lbl">ETL/Python</span><div class="prog-bar"><div class="prog-fill" style="width:30%;background:#185FA5"></div></div><span class="prog-pct" style="color:#185FA5">30%</span></div>
+      <div class="prog-row"><span class="prog-lbl">Trilha</span><div class="prog-bar"><div class="prog-fill" style="width:45%;background:#BA7517"></div></div><span class="prog-pct" style="color:#BA7517">45%</span></div>
+      <div class="milestone"><div class="dot" style="background:#3B6D11"></div><span>Conclusão estimada: <strong>~30/Mai</strong> · 14h concluídas</span></div>
+    </div>
+
+    <div class="dev-card star">
+      <div class="dev-head">
+        <div class="avatar" style="background:#EAF3DE;color:#1A6640">BY</div>
+        <div><div class="dev-name">Bruno Yoshihara</div><div class="dev-sub">Iniciou 18/Mai · ETL + Foundry</div></div>
+        <span class="status-badge s-ahead">Adiantado</span>
+      </div>
+      <div class="prog-row"><span class="prog-lbl">Foundry</span><div class="prog-bar"><div class="prog-fill" style="width:43%;background:#3B6D11"></div></div><span class="prog-pct" style="color:#3B6D11">43%</span></div>
+      <div class="prog-row"><span class="prog-lbl">ETL/Python</span><div class="prog-bar"><div class="prog-fill" style="width:40%;background:#185FA5"></div></div><span class="prog-pct" style="color:#185FA5">40%</span></div>
+      <div class="prog-row"><span class="prog-lbl">Trilha</span><div class="prog-bar"><div class="prog-fill" style="width:29%;background:#BA7517"></div></div><span class="prog-pct" style="color:#BA7517">29%</span></div>
+      <div class="milestone"><div class="dot" style="background:#3B6D11"></div><span>Conclusão estimada: <strong>~02/Jun</strong> · 9h concluídas</span></div>
+    </div>
+
+    <div class="dev-card star">
+      <div class="dev-head">
+        <div class="avatar" style="background:#EAF3DE;color:#1A6640">IO</div>
+        <div><div class="dev-name">Iago De Oliveira</div><div class="dev-sub">Iniciou 13/Mai · ETL + Foundry</div></div>
+        <span class="status-badge s-ahead">Adiantado</span>
+      </div>
+      <div class="prog-row"><span class="prog-lbl">Foundry</span><div class="prog-bar"><div class="prog-fill" style="width:25%;background:#3B6D11"></div></div><span class="prog-pct" style="color:#3B6D11">25%</span></div>
+      <div class="prog-row"><span class="prog-lbl">ETL/Python</span><div class="prog-bar"><div class="prog-fill" style="width:35%;background:#185FA5"></div></div><span class="prog-pct" style="color:#185FA5">35%</span></div>
+      <div class="prog-row"><span class="prog-lbl">Trilha</span><div class="prog-bar"><div class="prog-fill" style="width:23%;background:#BA7517"></div></div><span class="prog-pct" style="color:#BA7517">23%</span></div>
+      <div class="milestone"><div class="dot" style="background:#3B6D11"></div><span>Conclusão estimada: <strong>~03/Jun</strong> · 7h concluídas</span></div>
+    </div>
+
+    <div class="dev-card star">
+      <div class="dev-head">
+        <div class="avatar" style="background:#EAF3DE;color:#1A6640">IF</div>
+        <div><div class="dev-name">Igor Freitas <span style="font-size:10px;color:#1A6640;font-weight:400">ETL dispensado</span></div><div class="dev-sub">Iniciou 04/Mai · Direto no Foundry</div></div>
+        <span class="status-badge s-ahead">Adiantado</span>
+      </div>
+      <div class="prog-row"><span class="prog-lbl">Foundry</span><div class="prog-bar"><div class="prog-fill" style="width:43%;background:#3B6D11"></div></div><span class="prog-pct" style="color:#3B6D11">43%</span></div>
+      <div class="prog-row"><span class="prog-lbl">ETL/Python</span><div class="prog-bar"><div class="prog-fill" style="width:100%;background:#D1D5DB"></div></div><span class="prog-pct" style="color:#9CA3AF">N/A</span></div>
+      <div class="prog-row"><span class="prog-lbl">Trilha</span><div class="prog-bar"><div class="prog-fill" style="width:19%;background:#BA7517"></div></div><span class="prog-pct" style="color:#BA7517">19%</span></div>
+      <div class="milestone"><div class="dot" style="background:#3B6D11"></div><span>Conclusão estimada: <strong>~04/Jun</strong> · 6h concluídas</span></div>
+    </div>
+
+    <div class="dev-card star">
+      <div class="dev-head">
+        <div class="avatar" style="background:#EAF3DE;color:#1A6640">LH</div>
+        <div><div class="dev-name">Leonardo Heck</div><div class="dev-sub">Iniciou 20/Mai · Foundry</div></div>
+        <span class="status-badge s-ahead">Adiantado</span>
+      </div>
+      <div class="prog-row"><span class="prog-lbl">Foundry</span><div class="prog-bar"><div class="prog-fill" style="width:34%;background:#3B6D11"></div></div><span class="prog-pct" style="color:#3B6D11">34%</span></div>
+      <div class="prog-row"><span class="prog-lbl">ETL/Python</span><div class="prog-bar"><div class="prog-fill" style="width:0%;background:#185FA5"></div></div><span class="prog-pct" style="color:#9CA3AF">—</span></div>
+      <div class="prog-row"><span class="prog-lbl">Trilha</span><div class="prog-bar"><div class="prog-fill" style="width:18%;background:#BA7517"></div></div><span class="prog-pct" style="color:#BA7517">18%</span></div>
+      <div class="milestone"><div class="dot" style="background:#BA7517"></div><span>Conclusão estimada: <strong>~05/Jun</strong> · ETL ainda não iniciado</span></div>
+    </div>
+
+    <div class="dev-card">
+      <div class="dev-head">
+        <div class="avatar" style="background:#E6F1FB;color:#0C447C">VR</div>
+        <div><div class="dev-name">Vanessa Rossi</div><div class="dev-sub">Iniciou 15/Mai · ETL/Python</div></div>
+        <span class="status-badge s-track">No prazo</span>
+      </div>
+      <div class="prog-row"><span class="prog-lbl">Foundry</span><div class="prog-bar"><div class="prog-fill" style="width:0%;background:#3B6D11"></div></div><span class="prog-pct" style="color:#9CA3AF">—</span></div>
+      <div class="prog-row"><span class="prog-lbl">ETL/Python</span><div class="prog-bar"><div class="prog-fill" style="width:30%;background:#185FA5"></div></div><span class="prog-pct" style="color:#185FA5">30%</span></div>
+      <div class="prog-row"><span class="prog-lbl">Trilha</span><div class="prog-bar"><div class="prog-fill" style="width:13%;background:#BA7517"></div></div><span class="prog-pct" style="color:#BA7517">13%</span></div>
+      <div class="milestone"><div class="dot" style="background:#185FA5"></div><span>Conclusão estimada: <strong>~06/Jun</strong> · Foundry ainda não iniciado</span></div>
+    </div>
+
+  </div>
+
+  <div class="sec">Ranking de progresso — trilha priorizada (~31h)</div>
+  <div class="ranking">
+    <div style="display:flex;font-size:10px;color:#9AB0C4;margin-bottom:8px;gap:10px">
+      <span style="width:120px;flex-shrink:0"></span>
+      <span style="flex:1">0%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;25%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;50%</span>
+    </div>
+    <div class="rank-row"><span class="rank-name">Emilly Kennieli</span><div class="rank-bar-wrap"><div class="rank-bar" style="width:45%;background:#3B6D11">14h</div></div><span class="rank-pct" style="color:#3B6D11">45%</span><span class="rank-proj">~30/Mai</span></div>
+    <div class="rank-row"><span class="rank-name">Bruno Yoshihara</span><div class="rank-bar-wrap"><div class="rank-bar" style="width:29%;background:#3B6D11">9h</div></div><span class="rank-pct" style="color:#3B6D11">29%</span><span class="rank-proj">~02/Jun</span></div>
+    <div class="rank-row"><span class="rank-name">Iago De Oliveira</span><div class="rank-bar-wrap"><div class="rank-bar" style="width:23%;background:#3B6D11">7h</div></div><span class="rank-pct" style="color:#3B6D11">23%</span><span class="rank-proj">~03/Jun</span></div>
+    <div class="rank-row"><span class="rank-name">Igor Freitas</span><div class="rank-bar-wrap"><div class="rank-bar" style="width:19%;background:#639922">6h</div></div><span class="rank-pct" style="color:#639922">19%</span><span class="rank-proj">~04/Jun</span></div>
+    <div class="rank-row"><span class="rank-name">Leonardo Heck</span><div class="rank-bar-wrap"><div class="rank-bar" style="width:18%;background:#639922">5,5h</div></div><span class="rank-pct" style="color:#639922">18%</span><span class="rank-proj">~05/Jun</span></div>
+    <div class="rank-row"><span class="rank-name">Vanessa Rossi</span><div class="rank-bar-wrap"><div class="rank-bar" style="width:13%;background:#185FA5">4h</div></div><span class="rank-pct" style="color:#185FA5">13%</span><span class="rank-proj">~06/Jun</span></div>
+  </div>
+
+  <div class="sec">Encontros com time de dados — agenda</div>
+  <div class="meetings">
+    <div class="meet-row"><span class="meet-date">28/Mai</span><span class="meet-tag"><span class="tag-pill t-foundry">Foundry</span></span><span class="meet-topic"><strong>Rafa</strong> — Conexão de Dados · Integração com fontes externas e configuração de conexões</span></div>
+    <div class="meet-row"><span class="meet-date">28/Mai</span><span class="meet-tag"><span class="tag-pill t-python">Python ETL</span></span><span class="meet-topic"><strong>Rafa</strong> — Conexão com Banco de Dados · Python + SQL Server</span></div>
+    <div class="meet-row"><span class="meet-date">29/Mai</span><span class="meet-tag"><span class="tag-pill t-python">Python ETL</span></span><span class="meet-topic"><strong>Rafa</strong> — Template Pipeline de Dados · Apresentar template + código + projeto modelo</span></div>
+    <div class="meet-row"><span class="meet-date">01/Jun</span><span class="meet-tag"><span class="tag-pill t-python">Python ETL</span></span><span class="meet-topic"><strong>Vinicius</strong> — Manipulação Excel/CSV/TXT · Importando arquivos, tratando nulos</span></div>
+    <div class="meet-row"><span class="meet-date">03/Jun</span><span class="meet-tag"><span class="tag-pill t-python">Python ETL</span></span><span class="meet-topic"><strong>Douglas</strong> — Tratamento de Dados · Consolidando arquivos, conversão, adição de colunas</span></div>
+    <div class="meet-row"><span class="meet-date">05/Jun</span><span class="meet-tag"><span class="tag-pill t-github">GitHub</span></span><span class="meet-topic"><strong>Douglas</strong> — Melhores práticas no dia a dia — Python e integração com Foundry</span></div>
+    <div class="meet-row"><span class="meet-date">08/Jun</span><span class="meet-tag"><span class="tag-pill t-sql">SQL</span></span><span class="meet-topic"><strong>Rafa / Vini / GS</strong> — Queries complexas do dia a dia · Cases reais Lear, situações cotidianas + Foundry</span></div>
+  </div>
+
+  <div class="footer">Capacitação Foundry · Squad Optimus · Cliente Lear · Restrito — uso interno · João Vítor da Silva Feltrin</div>
+
+</div>
+</body>
+</html>
